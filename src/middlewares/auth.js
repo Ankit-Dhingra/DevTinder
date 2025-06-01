@@ -13,7 +13,7 @@ const userAuth = async (req, res, next) => {
     if (!AuthToken) {
       res.status(401).json({message : "User Not Authorized"})
     }
-    const decoded = await jwt.verify(AuthToken, "Ankit@2002");
+    const decoded = await jwt.verify(AuthToken, process.env.JWT_SECRET);
     const user = await User.findById({ _id: decoded._id }).select(USER_SAFE_DATA);
 
     if (!user) {
