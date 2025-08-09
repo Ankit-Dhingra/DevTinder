@@ -3,7 +3,7 @@ const { userAuth } = require("../middlewares/auth");
 const User = require("../models/user");
 const profileRouter = express.Router();
 const { validateProfileEditData } = require("../utils/validation");
-const USER_SAFE_DATA = "firstName lastName emailId photoUrl about skills createdAt age gender password";
+const USER_SAFE_DATA = "firstName lastName emailId photoUrl about skills createdAt age gender password isPremium";
 
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {

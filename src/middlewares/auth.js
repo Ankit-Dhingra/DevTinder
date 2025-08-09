@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const USER_SAFE_DATA = "firstName lastName emailId photoUrl about skills createdAt age gender";
+const USER_SAFE_DATA = "firstName lastName emailId photoUrl about skills createdAt age gender isPremium";
 
 const userAuth = async (req, res, next) => {
   // Read the token from req.cookies

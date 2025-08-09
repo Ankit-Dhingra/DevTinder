@@ -6,7 +6,7 @@ const { userAuth } = require("../middlewares/auth");
 
 // const USER_SAFE_DATA = "firstName lastName";
 const USER_SAFE_DATA =
-  "firstName lastName emailId photoUrl about skills createdAt age gender";
+  "firstName lastName emailId photoUrl about skills createdAt age gender isPremium";
 
 // To get all the pending request for logged in user
 userRouter.get("/user/requests/received", userAuth, async (req, res) => {

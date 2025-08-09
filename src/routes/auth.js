@@ -5,7 +5,7 @@ const User = require("../models/user");
 const { validateSignupData } = require("../utils/validation.js");
 
 const USER_SAFE_DATA =
-  "firstName lastName emailId photoUrl about skills createdAt age gender password";
+  "firstName lastName emailId photoUrl about skills createdAt age gender password isPremium";
 
 authRouter.post("/signup", async (req, res) => {
   try {
