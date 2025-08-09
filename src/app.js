@@ -12,6 +12,8 @@ const cors = require("cors");
 require("dotenv").config();
 
 const webhookRouter = require("./routes/webhook.js");
+app.use("/webhook", express.raw({ type: "application/json" }), webhookRouter);
+
 app.use(
   cors({
     origin: "http://localhost:5173",
