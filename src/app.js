@@ -12,7 +12,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const webhookRouter = require("./routes/webhook.js");
-app.use("/api/webhook", express.raw({ type: "application/json" }), webhookRouter);
+app.use("/webhook", express.raw({ type: "application/json" }), webhookRouter);
 
 app.use(
   cors({
@@ -20,7 +20,7 @@ app.use(
     credentials: true,
   })
 );
-app.use("/", webhookRouter);
+
 app.use(express.json());
 app.use(CookieParser());
 
