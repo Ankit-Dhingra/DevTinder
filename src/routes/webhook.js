@@ -23,27 +23,42 @@ webhookRouter.post("/", async (req, res) => {
     return res.sendStatus(400);
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
+  if (event.type === "payment_intent.succeeded") {
+    const paymentIntent = event.data.object;
+
+    // Optional: Check if metadata contains orderId
+    const orderId = paymentIntent.metadata?.orderId;
+    if (!orderId) {
+      console.warn("⚠ No orderId found in payment_intent.succeeded");
+      return res.json({ received: true });
+    }
 
     try {
-      // Find order using metadata
-      const order = await OrderModel.findById(session.metadata.orderId);
-      console.log("Order DB : ", order)
-      console.log("OrderID DB : ", session.metadata.orderId)
-      if (order) {
-        order.paymentStatus = "paid";
-        order.stripePaymentIntentId = session.payment_intent;
-        await order.save();
+      const order = await OrderModel.findById(orderId);
+      if (!order) {
+        console.warn(`⚠ Order not found for ID: ${orderId}`);
+        return res.json({ received: true });
+      }
 
-        const user = await UserModel.findById(order.userId);
+      order.paymentStatus = "paid";
+      order.stripePaymentIntentId = paymentIntent.id;
+      await order.save();
+
+      const user = await UserModel.findById(order.userId);
+      if (user) {
         user.isPremium = true;
         await user.save();
-        console.log("check User DB :" , user)
       }
+
+      console.log("✅ Payment successful, order and user updated");
     } catch (err) {
-      console.error("Error updating order:", err);
+      console.error("❌ Error updating order:", err);
     }
+  }
+
+  if (event.type === "payment_intent.canceled") {
+    const paymentIntent = event.data.object;
+    console.log(`⚠ Payment canceled for PaymentIntent ${paymentIntent.id}`);
   }
 
   res.json({ received: true });
