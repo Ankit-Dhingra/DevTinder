@@ -7,7 +7,7 @@ const UserModel = require("../models/user");
 
 const webhookRouter = express.Router();
 
-webhookRouter.post("/webhook", async (req, res) => {
+webhookRouter.post("/", async (req, res) => {
   const sig = req.headers["stripe-signature"];
 
   let event;
