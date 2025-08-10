@@ -48,8 +48,10 @@ paymentRouter.post("/create-checkout-session", userAuth, async (req, res) => {
       billing_address_collection: "required", // collects name and address
       success_url: `${process.env.CLIENT_URL}/premium`,
       cancel_url: `${process.env.CLIENT_URL}/premium`,
-      metadata: {
-        orderId: order._id.toString(),
+      payment_intent_data: {
+        metadata: {
+          orderId: order._id.toString(),
+        },
       },
     });
 
