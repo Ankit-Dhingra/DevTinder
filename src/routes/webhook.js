@@ -17,6 +17,7 @@ webhookRouter.post("/", async (req, res) => {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET // from Stripe dashboard
     );
+    console.log("✅ Webhook verified:", event.type);
   } catch (err) {
     console.error("Webhook signature verification failed.", err.message);
     return res.sendStatus(400);
@@ -28,6 +29,8 @@ webhookRouter.post("/", async (req, res) => {
     try {
       // Find order using metadata
       const order = await OrderModel.findById(session.metadata.orderId);
+      console.log("Order DB : ", order)
+      console.log("OrderID DB : ", session.metadata.orderId)
       if (order) {
         order.paymentStatus = "paid";
         order.stripePaymentIntentId = session.payment_intent;
@@ -36,6 +39,7 @@ webhookRouter.post("/", async (req, res) => {
         const user = await UserModel.findById(order.userId);
         user.isPremium = true;
         await user.save();
+        console.log("check User DB :" , user)
       }
     } catch (err) {
       console.error("Error updating order:", err);
