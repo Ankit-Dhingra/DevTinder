@@ -8,6 +8,8 @@ const CookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const { userAuth } = require("./middlewares/auth.js");
 const cors = require("cors");
+const http = require('http');
+const initializeSocket = require('./utils/socket.js');
 
 require("dotenv").config();
 
@@ -31,17 +33,22 @@ const profileRouter = require("./routes/profile.js");
 const requestRouter = require("./routes/request.js");
 const userRouter = require("./routes/user.js");
 const paymentRouter = require("./routes/payment.js");
+const chatRouter = require("./routes/chat.js");
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 app.use("/", paymentRouter);
+app.use("/", chatRouter);
+
+const server = http.createServer(app);
+initializeSocket(server);
 
 connectDB()
   .then(() => {
     console.log("MongoDB Connected successfully...");
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
       console.log("Server is listening to Port 7777...");
     });
   })
